@@ -56,7 +56,7 @@ pub struct ContentFilter {
 pub struct Choice {
     finish_reason: String,
     index: u32,
-    message: Message, // This is the same Message struct you defined earlier
+    message: Message,
     content_filter_results: HashMap<String, ContentFilter>,
 }
 
