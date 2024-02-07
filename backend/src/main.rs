@@ -16,9 +16,9 @@ async fn chat(data: web::Json<api::types::ApiRequestBody>, req: HttpRequest) -> 
         return response;
     }
 
-    let message = data.into_inner();
-    let message = helpers::convert_api_request_to_request_body(message);
-    match azure_openai::wrapper::send_request_to_openai(message).await {
+    let api_request_body = data.into_inner();
+    let openai_request_body = helpers::convert_api_request_to_request_body(api_request_body);
+    match azure_openai::wrapper::send_request_to_openai(openai_request_body).await {
         Ok(response) => {
             println!("Response: {:?}", response);
             HttpResponse::Ok().json(response)
