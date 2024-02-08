@@ -16,22 +16,32 @@ pub fn convert_api_request_to_request_body(api_request: ApiRequestBody) -> Reque
         presence_penalty: api_request.presence_penalty.unwrap_or(0.0),
         max_tokens: api_request.max_tokens.unwrap_or(100),
         stop: api_request.stop,
-        deployment: "hy-gpt4-deploy".to_string(),
-        stream: true,
+        stream: false,
+        extensions: if api_request.use_own_data.unwrap_or(false) {
+            Some(get_azure_search_extensions())
+        } else {
+            None
+        },
+    }
+}
+
+fn get_azure_search_extensions() -> crate::azure_openai::types::Extensions {
+    crate::azure_openai::types::Extensions {
         data_sources: vec![DataSource {
             data_type: "AzureCognitiveSearch".to_string(),
             parameters: get_azure_search_parameters(),
         }],
         azure_search_endpoint: "https://hy-ai-cognitive-search.search.windows.net".to_string(),
-        azure_search_key: "***".to_string(),
+        azure_search_key: std::env::var("AZURE_SEARCH_KEY").unwrap(),
         azure_search_index_name: "mooc-5g-index".to_string(),
+        deployment: "hy-gpt4-deploy".to_string(),
     }
 }
 
 fn get_azure_search_parameters() -> crate::azure_openai::types::DataSourceParameters {
     crate::azure_openai::types::DataSourceParameters {
-        endpoint: "$search_endpoint".to_string(),
-        index_name: "$search_index".to_string(),
+        endpoint: "https://hy-ai-cognitive-search.search.windows.net".to_string(),
+        index_name: "mooc-5g-index".to_string(),
         semantic_configuration: "default".to_string(),
         query_type: "simple".to_string(),
         fields_mapping: HashMap::new(),
@@ -40,7 +50,7 @@ fn get_azure_search_parameters() -> crate::azure_openai::types::DataSourceParame
         filter: None,
         strictness: 3,
         top_n_documents: 5,
-        key: "***".to_string(),
+        key: std::env::var("AZURE_SEARCH_KEY").unwrap(),
     }
 }
 

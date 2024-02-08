@@ -9,6 +9,7 @@ pub struct Message {
 #[derive(Serialize, Deserialize)]
 pub struct ApiRequestBody {
     pub messages: Vec<Message>,
+    pub use_own_data: Option<bool>, // Temporary, for testing. This will be extended to a more complex structure.
     pub temperature: Option<f32>,
     pub top_p: Option<f32>,
     pub frequency_penalty: Option<f32>,
