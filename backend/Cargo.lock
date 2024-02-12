@@ -219,21 +219,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ai-creator-backend"
-version = "0.1.0"
-dependencies = [
- "actix-web",
- "dotenv",
- "futures",
- "mockito",
- "reqwest",
- "serde",
- "serde_json",
- "thiserror",
- "tokio",
-]
-
-[[package]]
 name = "alloc-no-stdlib"
 version = "2.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -631,6 +616,21 @@ dependencies = [
  "pin-project-lite",
  "pin-utils",
  "slab",
+]
+
+[[package]]
+name = "gcai-backend"
+version = "0.1.0"
+dependencies = [
+ "actix-web",
+ "dotenv",
+ "futures",
+ "mockito",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
 ]
 
 [[package]]
