@@ -7,14 +7,17 @@ pub enum Url {
 }
 
 impl Url {
-    pub fn to_string(&self, api_base: String) -> String {
+    pub fn to_string(&self, api_base: String, deplpyment: String) -> String {
         let api_base = api_base.trim_end_matches('/');
         match self {
             Url::CompletionUrl => {
-                format!("{}/openai/deployments/hy-gpt4-deploy/chat/completions?api-version=2023-07-01-preview", api_base)
+                format!(
+                    "{}/openai/deployments/{}/chat/completions?api-version=2023-07-01-preview",
+                    api_base, deplpyment
+                )
             }
             Url::ExtensionsUrl => {
-                format!("{}/openai/deployments/hy-gpt4-deploy/extensions/chat/completions?api-version=2023-07-01-preview", api_base)
+                format!("{}/openai/deployments/{}/extensions/chat/completions?api-version=2023-07-01-preview", api_base, deplpyment)
             }
         }
     }

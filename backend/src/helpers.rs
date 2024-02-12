@@ -18,14 +18,16 @@ pub fn convert_api_request_to_request_body(api_request: ApiRequestBody) -> Reque
         stop: api_request.stop,
         stream: false,
         extensions: if api_request.use_own_data.unwrap_or(false) {
-            Some(get_azure_search_extensions())
+            Some(get_azure_search_extensions(
+                api_request.azure_search_index_name.clone(),
+            ))
         } else {
             None
         },
     }
 }
 
-fn get_azure_search_extensions() -> crate::azure_openai::types::Extensions {
+fn get_azure_search_extensions(indexer: Option<String>) -> crate::azure_openai::types::Extensions {
     crate::azure_openai::types::Extensions {
         data_sources: vec![DataSource {
             data_type: "AzureCognitiveSearch".to_string(),
@@ -33,7 +35,11 @@ fn get_azure_search_extensions() -> crate::azure_openai::types::Extensions {
         }],
         azure_search_endpoint: "https://hy-ai-cognitive-search.search.windows.net".to_string(),
         azure_search_key: std::env::var("AZURE_SEARCH_KEY").unwrap(),
-        azure_search_index_name: "mooc-5g-index".to_string(),
+        azure_search_index_name: if indexer.is_some() {
+            indexer.unwrap()
+        } else {
+            "mooc-5g-index".to_string()
+        },
         deployment: "hy-gpt4-deploy".to_string(),
     }
 }

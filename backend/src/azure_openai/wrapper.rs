@@ -22,9 +22,15 @@ pub async fn send_request_to_openai(
     let api_key = std::env::var("OPENAI_API_KEY")?;
     let api_base = std::env::var("OPENAI_API_BASE")?;
     let api_url = if body.extensions.is_some() {
-        types::Url::ExtensionsUrl.to_string(api_base)
+        types::Url::ExtensionsUrl.to_string(
+            api_base,
+            body.extensions.as_ref().unwrap().deployment.clone(),
+        )
     } else {
-        types::Url::CompletionUrl.to_string(api_base)
+        types::Url::CompletionUrl.to_string(
+            api_base,
+            body.extensions.as_ref().unwrap().deployment.clone(),
+        )
     };
 
     match serde_json::to_string(&body) {
