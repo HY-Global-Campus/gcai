@@ -27,10 +27,7 @@ pub async fn send_request_to_openai(
             body.extensions.as_ref().unwrap().deployment.clone(),
         )
     } else {
-        types::Url::CompletionUrl.to_string(
-            api_base,
-            body.extensions.as_ref().unwrap().deployment.clone(),
-        )
+        types::Url::CompletionUrl.to_string(api_base, "hy-gpt4-deploy".to_string())
     };
 
     match serde_json::to_string(&body) {
