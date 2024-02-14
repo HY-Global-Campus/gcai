@@ -1,35 +1,68 @@
 use std::collections::HashMap;
 
 use crate::api::types::ApiRequestBody;
-use crate::azure_openai::types::{DataSource, RequestBody};
+use crate::azure_openai;
+use crate::azure_openai::completions;
+use crate::azure_openai::extensions;
 
-pub fn convert_api_request_to_request_body(api_request: ApiRequestBody) -> RequestBody {
-    RequestBody {
-        messages: api_request
-            .messages
-            .iter()
-            .map(convert_message_from_api_to_azure_openai)
-            .collect(),
-        temperature: api_request.temperature.unwrap_or(0.0),
-        top_p: api_request.top_p.unwrap_or(1.0),
-        frequency_penalty: api_request.frequency_penalty.unwrap_or(0.0),
-        presence_penalty: api_request.presence_penalty.unwrap_or(0.0),
-        max_tokens: api_request.max_tokens.unwrap_or(100),
-        stop: api_request.stop,
-        stream: false,
-        extensions: if api_request.use_own_data.unwrap_or(false) {
-            Some(get_azure_search_extensions(
-                api_request.azure_search_index_name.clone(),
-            ))
-        } else {
-            None
-        },
+pub fn convert_api_request_to_request_body(
+    api_request: ApiRequestBody,
+) -> azure_openai::types::RequestBody {
+    if api_request.use_own_data == Some(true) {
+        azure_openai::types::RequestBody::ExtensionsRequestBody(
+            convert_api_request_to_extensions_request_body(api_request),
+        )
+    } else {
+        azure_openai::types::RequestBody::CompletionsRequestBody(
+            convert_api_request_to_completions_request_body(api_request),
+        )
     }
 }
 
-fn get_azure_search_extensions(indexer: Option<String>) -> crate::azure_openai::types::Extensions {
-    crate::azure_openai::types::Extensions {
-        data_sources: vec![DataSource {
+fn convert_api_request_to_completions_request_body(
+    api_request: ApiRequestBody,
+) -> completions::types::RequestBody {
+    completions::types::RequestBody {
+        messages: api_request
+            .messages
+            .iter()
+            .map(convert_message_from_api_to_azure_openai_completion)
+            .collect(),
+        temperature: api_request.temperature.unwrap_or(0.7),
+        top_p: api_request.top_p.unwrap_or(1.0),
+        frequency_penalty: api_request.frequency_penalty.unwrap_or(0.0),
+        presence_penalty: api_request.presence_penalty.unwrap_or(0.0),
+        max_tokens: api_request.max_tokens.unwrap_or(150),
+        stop: api_request.stop,
+        stream: false,
+    }
+}
+
+fn convert_api_request_to_extensions_request_body(
+    api_request: ApiRequestBody,
+) -> extensions::types::RequestBody {
+    extensions::types::RequestBody {
+        messages: api_request
+            .messages
+            .iter()
+            .map(convert_message_from_api_to_openai_extension)
+            .collect(),
+        temperature: api_request.temperature.unwrap_or(0.7),
+        top_p: api_request.top_p.unwrap_or(1.0),
+        frequency_penalty: api_request.frequency_penalty.unwrap_or(0.0),
+        presence_penalty: api_request.presence_penalty.unwrap_or(0.0),
+        max_tokens: api_request.max_tokens.unwrap_or(150),
+        stop: api_request.stop,
+        stream: false,
+        extensions: Some(get_azure_search_extensions(
+            api_request.azure_search_index_name,
+        )),
+    }
+}
+
+fn get_azure_search_extensions(indexer: Option<String>) -> extensions::types::Extensions {
+    extensions::types::Extensions {
+        data_sources: vec![extensions::types::DataSource {
             data_type: "AzureCognitiveSearch".to_string(),
             parameters: get_azure_search_parameters(),
         }],
@@ -44,8 +77,8 @@ fn get_azure_search_extensions(indexer: Option<String>) -> crate::azure_openai::
     }
 }
 
-fn get_azure_search_parameters() -> crate::azure_openai::types::DataSourceParameters {
-    crate::azure_openai::types::DataSourceParameters {
+fn get_azure_search_parameters() -> extensions::types::DataSourceParameters {
+    extensions::types::DataSourceParameters {
         endpoint: "https://hy-ai-cognitive-search.search.windows.net".to_string(),
         index_name: "mooc-5g-index".to_string(),
         semantic_configuration: "default".to_string(),
@@ -60,10 +93,19 @@ fn get_azure_search_parameters() -> crate::azure_openai::types::DataSourceParame
     }
 }
 
-fn convert_message_from_api_to_azure_openai(
+fn convert_message_from_api_to_azure_openai_completion(
     api_message: &crate::api::types::Message,
-) -> crate::azure_openai::types::Message {
-    crate::azure_openai::types::Message {
+) -> completions::types::Message {
+    completions::types::Message {
+        role: api_message.role.clone(),
+        content: api_message.content.clone(),
+    }
+}
+
+fn convert_message_from_api_to_openai_extension(
+    api_message: &crate::api::types::Message,
+) -> extensions::types::Message {
+    extensions::types::Message {
         role: api_message.role.clone(),
         content: api_message.content.clone(),
     }
