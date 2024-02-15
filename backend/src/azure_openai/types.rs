@@ -25,12 +25,14 @@ impl Url {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum RequestBody {
     CompletionsRequestBody(completions::types::RequestBody),
     ExtensionsRequestBody(extensions::types::RequestBody),
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum ResponseBody {
     CompletionsResponseBody(completions::types::ResponseBody),
     ExtensionsResponseBody(extensions::types::ResponseBody),
