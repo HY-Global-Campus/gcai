@@ -8,27 +8,27 @@
   }
 
   let messages: Message[] = [
-    { role: "assistant", content: "This is test message" }
+    { role: "assistant", content: "Hello! How can I help today?" }
   ];
   let userInput: string = "";
 
   async function sendMessage(): Promise<void> {
+   messages = [...messages, { role: "user", content: userInput }];
     const payload = {
-      messages: [
-        { role: "system", content: "You are an AI assistant that helps people find information." },
-        { role: "user", content: userInput }
-      ]
+      messages: messages 
     };
 
     try {
       // Send the request to the proxy endpoint instead of the external API
       const response = await axios.post('/api', payload);
-      messages.push({ role: "user", content: userInput });
+
+      
       // Assuming the server response structure matches what the client expects
       console.log(response.data);
       const botResponse: Message | undefined = response.data.choices[0].message;
       if (botResponse) {
-        messages.push({ role: "assistant", content: botResponse.content });
+        messages = [...messages,  { role: "assistant", content: botResponse.content }];
+        console.log(messages);
       }
       userInput = ""; // Clear the input field
     } catch (error) {
