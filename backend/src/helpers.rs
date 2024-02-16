@@ -32,7 +32,7 @@ fn convert_api_request_to_completions_request_body(
         top_p: api_request.top_p.unwrap_or(1.0),
         frequency_penalty: api_request.frequency_penalty.unwrap_or(0.0),
         presence_penalty: api_request.presence_penalty.unwrap_or(0.0),
-        max_tokens: api_request.max_tokens.unwrap_or(150),
+        max_tokens: api_request.max_tokens.unwrap_or(1000),
         stop: api_request.stop,
         stream: false,
     }
