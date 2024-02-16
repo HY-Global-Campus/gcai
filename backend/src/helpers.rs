@@ -8,7 +8,7 @@ use crate::azure_openai::extensions;
 pub fn convert_api_request_to_request_body(
     api_request: ApiRequestBody,
 ) -> azure_openai::types::RequestBody {
-    if api_request.use_own_data == Some(true) {
+    if api_request.azure_search_index_name.is_some() {
         azure_openai::types::RequestBody::ExtensionsRequestBody(
             convert_api_request_to_extensions_request_body(api_request),
         )
@@ -60,7 +60,7 @@ fn convert_api_request_to_extensions_request_body(
     }
 }
 
-fn get_azure_search_extensions(indexer: Option<String>) -> extensions::types::Extensions {
+fn get_azure_search_extensions(indexe: Option<String>) -> extensions::types::Extensions {
     extensions::types::Extensions {
         data_sources: vec![extensions::types::DataSource {
             data_type: "AzureCognitiveSearch".to_string(),
@@ -68,8 +68,8 @@ fn get_azure_search_extensions(indexer: Option<String>) -> extensions::types::Ex
         }],
         azure_search_endpoint: "https://hy-ai-cognitive-search.search.windows.net".to_string(),
         azure_search_key: std::env::var("AZURE_SEARCH_KEY").unwrap(),
-        azure_search_index_name: if indexer.is_some() {
-            indexer.unwrap()
+        azure_search_index_name: if indexe.is_some() {
+            indexe.unwrap()
         } else {
             "mooc-5g-index".to_string()
         },

@@ -9,7 +9,6 @@ pub struct Message {
 #[derive(Serialize, Deserialize)]
 pub struct ApiRequestBody {
     pub messages: Vec<Message>,
-    pub use_own_data: Option<bool>, // Temporary, for testing. This will be extended to a more complex structure.
     pub azure_search_index_name: Option<String>,
     pub deployment: Option<String>,
     pub temperature: Option<f32>,
