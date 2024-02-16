@@ -28,7 +28,7 @@ pub struct ApiResponseBody {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Choice {
-    finish_reason: String,
-    index: u32,
-    message: Message,
+    pub finish_reason: String,
+    pub index: u32,
+    pub messages: Vec<Message>,
 }

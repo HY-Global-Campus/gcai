@@ -88,7 +88,7 @@ pub struct ContentFilter {
 pub struct Choice {
     pub finish_reason: Option<String>,
     pub index: u32,
-    pub message: Option<Message>,
+    pub message: Message,
     pub content_filter_results: Option<HashMap<String, ContentFilter>>,
 }
 

@@ -110,3 +110,88 @@ fn convert_message_from_api_to_openai_extension(
         content: api_message.content.clone(),
     }
 }
+
+pub fn convert_response_body_to_api_response(
+    response_body: azure_openai::types::ResponseBody,
+) -> crate::api::types::ApiResponseBody {
+    match response_body {
+        azure_openai::types::ResponseBody::CompletionsResponseBody(body) => {
+            convert_completions_response_body_to_api_response(body)
+        }
+        azure_openai::types::ResponseBody::ExtensionsResponseBody(body) => {
+            convert_extensions_response_body_to_api_response(body)
+        }
+    }
+}
+
+fn convert_completions_response_body_to_api_response(
+    response_body: completions::types::ResponseBody,
+) -> crate::api::types::ApiResponseBody {
+    crate::api::types::ApiResponseBody {
+        id: response_body.id,
+        created: response_body.created,
+        choices: response_body
+            .choices
+            .iter()
+            .map(convert_choice_from_azure_openai_completion_to_api)
+            .collect(),
+    }
+}
+
+fn convert_extensions_response_body_to_api_response(
+    response_body: extensions::types::ResponseBody,
+) -> crate::api::types::ApiResponseBody {
+    crate::api::types::ApiResponseBody {
+        id: response_body.id,
+        created: response_body.created,
+        choices: response_body
+            .choices
+            .iter()
+            .map(convert_choice_from_openai_extension_to_api)
+            .collect(),
+    }
+}
+
+fn convert_choice_from_azure_openai_completion_to_api(
+    choice: &completions::types::Choice,
+) -> crate::api::types::Choice {
+    crate::api::types::Choice {
+        finish_reason: choice.finish_reason.clone().unwrap_or("".to_string()),
+        index: choice.index,
+        messages: vec![convert_message_from_azure_openai_completion_to_api(
+            &choice.message,
+        )],
+    }
+}
+
+fn convert_choice_from_openai_extension_to_api(
+    choice: &extensions::types::Choice,
+) -> crate::api::types::Choice {
+    crate::api::types::Choice {
+        finish_reason: choice.finish_reason.clone().unwrap_or("".to_string()),
+        index: choice.index,
+        messages: choice
+            .messages
+            .iter()
+            .map(convert_message_from_openai_extension_to_api)
+            .collect(),
+    }
+}
+
+fn convert_message_from_azure_openai_completion_to_api(
+    message: &completions::types::Message,
+) -> crate::api::types::Message {
+    crate::api::types::Message {
+        role: message.role.clone(),
+        content: message.content.clone(),
+    }
+}
+
+fn convert_message_from_openai_extension_to_api(
+    message: &extensions::types::ResponseMessage,
+) -> crate::api::types::Message {
+    crate::api::types::Message {
+        role: message.role.clone(),
+        content: message.content.clone(),
+    }
+}

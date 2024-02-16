@@ -21,7 +21,8 @@ async fn chat(data: web::Json<api::types::ApiRequestBody>, req: HttpRequest) -> 
     match azure_openai::wrapper::send_request_to_openai(openai_request_body).await {
         Ok(response) => {
             println!("Response: {:?}", response);
-            HttpResponse::Ok().json(response)
+            let api_response = helpers::convert_response_body_to_api_response(response);
+            HttpResponse::Ok().json(api_response)
         }
         Err(e) => {
             eprintln!("Error sending request to OpenAI: {:?}", e);

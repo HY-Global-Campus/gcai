@@ -5,8 +5,8 @@ use std::collections::HashMap;
 pub struct ResponseMessage {
     pub role: String,
     pub content: String,
-    index: u32,
-    end_turn: bool,
+    pub index: u32,
+    pub end_turn: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -85,7 +85,7 @@ pub struct ResponseBody {
 pub struct Choice {
     pub finish_reason: Option<String>,
     pub index: u32,
-    pub messages: Option<Vec<ResponseMessage>>,
+    pub messages: Vec<ResponseMessage>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
