@@ -7,6 +7,12 @@
     content: string;
   }
 
+  interface Choice {
+    messages: Message[];
+    id: string;
+    created: number;
+  }
+
   let messages: Message[] = [
     { role: "assistant", content: "Hello! How can I help today?" }
   ];
@@ -25,11 +31,12 @@
       
       // Assuming the server response structure matches what the client expects
       console.log(response.data);
-      const botResponse: Message | undefined = response.data.choices[0].message;
-      if (botResponse) {
-        messages = [...messages,  { role: "assistant", content: botResponse.content }];
-        console.log(messages);
-      }
+      response.data.choices.map((choice: Choice) => {
+       choice.messages.map((message: Message) => {
+          messages = [...messages, { role: "assistant", content: message.content }];
+        })
+      }) 
+      
       userInput = ""; // Clear the input field
     } catch (error) {
       console.error("Failed to send message through proxy:", error);
