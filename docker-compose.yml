@@ -9,6 +9,13 @@ services:
     networks:
       - ai-creator-network
 
+  frontend:
+    build: ./simple-frontend/
+    ports:
+      - "3000:3000"
+    networks:
+        - ai-creator-network    
+
 networks:
   ai-creator-network:
     driver: bridge

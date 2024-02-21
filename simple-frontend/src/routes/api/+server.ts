@@ -1,17 +1,22 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config();
+}
 
 export const POST: RequestHandler = async ({ request }) => {
     const body = await request.json();
 
     // Define the URL of the external chat service
-    const externalApiUrl = 'http://localhost:8080/api/chat';
+    const externalApiUrl = `http://${process.env.BACKEND_TOKEN}/api/chat`;
 
     try {
         const response = await axios.post(externalApiUrl, body, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9UQkVNVGhCT`, // Adjust as needed
+                'Authorization': `Bearer ${process.env.BACKEND_TOKEN}`, // Adjust as needed
             },
         });
 
