@@ -5,11 +5,6 @@ name: Docker
 # separate terms of service, privacy policy, and support
 # documentation.
 
-on:
-  workflow_run:
-    workflows: ["Rust"]
-    types:
-      - completed
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -19,7 +14,6 @@ env:
 
 jobs:
   build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     runs-on: ubuntu-latest
     permissions:
