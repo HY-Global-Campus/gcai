@@ -10,7 +10,7 @@ export const POST: RequestHandler = async ({ request }) => {
     const body = await request.json();
 
     // Define the URL of the external chat service
-    const externalApiUrl = `http://${process.env.BACKEND_TOKEN}/api/chat`;
+    const externalApiUrl = `${process.env.BACKEND_URL}/api/chat`;
 
     try {
         const response = await axios.post(externalApiUrl, body, {
