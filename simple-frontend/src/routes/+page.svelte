@@ -28,7 +28,7 @@
     messages[0].content = instructions;
     messages = [...messages, { role: "user", content: userInput }];
     let payload: object;
-    if (indexer == "") {
+    if (indexer != "") {
       payload = {
         messages: messages, 
         azure_search_index_name: indexer
