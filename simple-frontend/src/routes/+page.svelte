@@ -13,6 +13,7 @@
     created: number;
   }
 
+  let indexer: string = "";
   let userInput: string = "";
   let courseName: string = "";
   let assistantName: string = "";
@@ -25,10 +26,18 @@
 
   async function sendMessage(): Promise<void> {
     messages[0].content = instructions;
-   messages = [...messages, { role: "user", content: userInput }];
-    const payload = {
-      messages: messages 
-    };
+    messages = [...messages, { role: "user", content: userInput }];
+    let payload: object;
+    if (indexer == "") {
+      payload = {
+        messages: messages, 
+        azure_search_index_name: indexer
+      };
+    } else {
+      payload = {
+        messages: messages 
+      };
+    }
     console.log(payload);
 
     userInput = ""; // Clear the input field
@@ -104,6 +113,11 @@
   Instructions
   <input type="text"
     bind:value={instructions}
+    placeholder="Type a message..."
+  >
+  Indexer:
+  <input type="text"
+    bind:value={indexer}
     placeholder="Type a message..."
   >
 <div class="chat-container">
