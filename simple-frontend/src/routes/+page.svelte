@@ -97,6 +97,15 @@
     border: 1px solid #ccc;
     border-radius: 5px;
   }
+  .input-group textarea {
+    height: auto; 
+    min-height: 80px; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none; 
+    overflow-y: auto; 
+  }
 
   .chat-container {
     border: 1px solid #ccc;
@@ -148,6 +157,8 @@
     align-items: center;
     gap: 10px;
   }
+
+
 </style>
 
 <div class="container">
@@ -166,7 +177,7 @@
     </div>
     <div class="input-group">
       <label for="instructions">Instructions</label>
-      <input id="instructions" type="text" bind:value={instructions}>
+      <textarea rows="5" bind:value={instructions} placeholder="Enter instructions here..."></textarea>
     </div>
     <div class="input-group">
       <label for="indexer">Search Index Name:</label>
