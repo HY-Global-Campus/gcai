@@ -102,7 +102,7 @@
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 10px;
-    max-height: 300px;
+    height: 300px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
