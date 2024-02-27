@@ -104,6 +104,8 @@
     border-radius: 10px;
     max-height: 300px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
   }
 
   .button-group {
@@ -121,16 +123,24 @@
     color: white;
   }
 
-  .message.system {
-    background-color: #f0f0f0;
+ .message {
+    padding: 10px 20px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    max-width: 60%;
+    word-wrap: break-word;
   }
 
   .message.user {
     background-color: #e0e0e0;
+    align-self: flex-end;
+    margin-left: auto;
   }
 
   .message.assistant {
     background-color: #d0d0d0;
+    align-self: flex-start;
+    margin-right: auto;
   }
 
   .upload-section {
