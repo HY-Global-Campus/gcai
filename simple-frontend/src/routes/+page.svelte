@@ -22,6 +22,7 @@
 
   let messages: Message[] = [
     { role: "system", content: instructions },
+    { role: "assistant", content: welcomeMessage }
   ];
 
   async function sendMessage(): Promise<void> {
