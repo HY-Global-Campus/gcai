@@ -169,7 +169,7 @@
       <input id="instructions" type="text" bind:value={instructions}>
     </div>
     <div class="input-group">
-      <label for="indexer">Indexer:</label>
+      <label for="indexer">Search Index Name:</label>
       <input id="indexer" type="text" bind:value={indexer}>
     </div>
     <div class="upload-section">
