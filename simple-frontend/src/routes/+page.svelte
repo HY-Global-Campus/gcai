@@ -20,6 +20,7 @@
   let welcomeMessage: string = "Hello! How can I help today?";
   let instructions: string = "You are an assistant that helps users find information.";
   let showSearchIndex: boolean = false;
+  let loading: boolean = false;
 
   let messages: Message[] = [
     { role: "system", content: instructions },
@@ -42,6 +43,8 @@
     console.log(payload);
 
     userInput = ""; // Clear the input field
+    loading = true
+
     try {
       // Send the request to the proxy endpoint instead of the external API
       const response = await axios.post('/api', payload);
@@ -51,7 +54,7 @@
       console.log(response.data);
       response.data.choices.map((choice: Choice) => {
         choice.messages.map((message: Message) => {
-            messages = [...messages, { role: "assistant", content: message.content }];
+            messages = [...messages, { role: message.role, content: message.content }];
           
         })
       }) 
@@ -59,20 +62,61 @@
     } catch (error) {
       console.error("Failed to send message through proxy:", error);
     }
+    loading = false;
   }
 
+  let dots = ''; // Initial state with no dots
+
   onMount(() => {
-    // Initialization logic if needed
-  });
+    const interval = setInterval(() => {
+            // Update dots state, cycling through ., .., ...
+            if (dots.length < 3) {
+                dots += '.';
+            } else {
+              dots = '';
+            }
+        }, 500); // Change dot state every 500ms
+
+        return () => {
+            clearInterval(interval); // Clean up interval on component destroy
+        };
+    });
 </script>
 
 
 <style>
+@font-face {
+    font-family: 'Gotham Narrow';
+    src: url('/fonts/Gotham-Narrow-Font-Family/GothamNarrow-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Gotham Narrow';
+    src: url('/fonts/Gotham-Narrow-Font-Family/GothamNarrow-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Gotham Narrow';
+    src: url('/fonts/Gotham-Narrow-Font-Family/GothamNarrow-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Gotham Narrow';
+    src: url('/fonts/Gotham-Narrow-Font-Family/GothamNarrow-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+  }  
 
   :global(body) {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: Gotham Narrow;
   }
 
   .banner {
@@ -167,6 +211,7 @@
     margin-bottom: 10px;
     max-width: 60%;
     word-wrap: break-word;
+    min-height: 20px;
   }
 
   .message.user {
@@ -228,17 +273,23 @@
   </div>
 
   <div class="box">
+    <h2>Test your assistant</h2>
     <div class="chat-container">
       <div class="message assistant">
         {welcomeMessage}
       </div>
-      {#each messages as message (message)}
-        {#if message.role === "user" || message.role === "assistant"}
+      {#each messages as message}
+        {#if message.role === 'user' || message.role === 'assistant'}
           <div class="message {message.role}">
             {message.content}
           </div>
          {/if}
        {/each}
+       {#if loading}
+        <div class="message assistant">
+          {dots}
+        </div>
+      {/if}
     </div>
     <div class="input-group">
       <input
