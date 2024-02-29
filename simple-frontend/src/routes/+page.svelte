@@ -19,6 +19,7 @@
   let assistantName: string = "";
   let welcomeMessage: string = "Hello! How can I help today?";
   let instructions: string = "You are an assistant that helps users find information.";
+  let showSearchIndex: boolean = false;
 
   let messages: Message[] = [
     { role: "system", content: instructions },
@@ -106,6 +107,11 @@
     overflow-y: auto; 
   }
 
+  .input-group input[type="checkbox"] {
+    margin-right: 5px;
+    align-self: flex-start;
+  }
+
   .chat-container {
     border: 1px solid #ccc;
     padding: 20px;
@@ -179,8 +185,14 @@
       <textarea rows="5" bind:value={instructions} placeholder="Enter instructions here..."></textarea>
     </div>
     <div class="input-group">
-      <label for="indexer">Search Index Name:</label>
-      <input id="indexer" type="text" bind:value={indexer}>
+      <div>
+        <label for="showSearchIndex">Use own data</label>
+        <input id="showSearchIndex" type="checkbox" bind:checked={showSearchIndex}>
+      </div>
+      {#if showSearchIndex}
+        <label for="indexer">Search Index Name:</label>
+        <input id="indexer" type="text" bind:value={indexer}>
+      {/if}
     </div>
     <div class="upload-section">
       <label for="fileUpload">Upload files</label>
