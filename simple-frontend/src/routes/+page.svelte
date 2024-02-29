@@ -68,6 +68,30 @@
 
 
 <style>
+
+  :global(body) {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  .banner {
+    background-color: #333;
+    color: white;
+    height: 100px;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 20px;
+  }
+  .logo {
+    height: 100%;
+    width: 300px;
+    background-image: url('HY_logo_W.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
   .container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -165,7 +189,10 @@
 
 
 </style>
-
+<div class="banner">
+  <h1>AI Creator</h1>
+  <div class="logo"></div>
+</div>
 <div class="container">
   <div class="box">
     <div class="input-group">
