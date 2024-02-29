@@ -70,10 +70,10 @@
   onMount(() => {
     const interval = setInterval(() => {
             // Update dots state, cycling through ., .., ...
-            if (dots.length < 3) {
+            if (dots.length < 4) {
                 dots += '.';
             } else {
-              dots = '';
+              dots = '.';
             }
         }, 500); // Change dot state every 500ms
 
@@ -211,7 +211,6 @@
     margin-bottom: 10px;
     max-width: 60%;
     word-wrap: break-word;
-    min-height: 20px;
   }
 
   .message.user {
