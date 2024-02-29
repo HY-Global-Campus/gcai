@@ -22,7 +22,6 @@
 
   let messages: Message[] = [
     { role: "system", content: instructions },
-    { role: "assistant", content: welcomeMessage }
   ];
 
   async function sendMessage(): Promise<void> {
@@ -191,6 +190,9 @@
 
   <div class="box">
     <div class="chat-container">
+      <div class="message assistant">
+        {welcomeMessage}
+      </div>
       {#each messages as message}
         {#if message.role === "user" || message.role === "assistant"}
           <div class="message {message.role}">
@@ -209,7 +211,6 @@
     </div>
     <div class="button-group">
       <button on:click={sendMessage}>Send</button>
-      <!-- Add more buttons here as needed to match your reference design -->
     </div>
   </div>
 </div>
