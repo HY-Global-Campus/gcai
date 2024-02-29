@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
 
   interface Message {
-    role: 'system' | 'user' | 'assistant';
+    role: 'system' | 'user' | 'assistant' | 'tool';
     content: string;
   }
 
@@ -232,7 +232,7 @@
       <div class="message assistant">
         {welcomeMessage}
       </div>
-      {#each messages as message}
+      {#each messages as message (message)}
         {#if message.role === "user" || message.role === "assistant"}
           <div class="message {message.role}">
             {message.content}
