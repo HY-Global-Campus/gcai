@@ -193,3 +193,89 @@ fn convert_message_from_openai_extension_to_api(
         content: message.content.clone(),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    pub fn init() {
+        std::env::set_var("AZURE_SEARCH_KEY", "test-key");
+    }
+
+    #[test]
+    fn test_convert_api_request_to_request_body() {
+        init();
+        let api_request = ApiRequestBody {
+            messages: vec![crate::api::types::Message {
+                role: "user".to_string(),
+                content: "What is the capital of France?".to_string(),
+            }],
+            temperature: Some(0.7),
+            top_p: Some(1.0),
+            frequency_penalty: Some(0.0),
+            presence_penalty: Some(0.0),
+            max_tokens: Some(1000),
+            stop: None,
+            azure_search_index_name: None,
+            deployment: Some("example-deployment".to_string()),
+        };
+        let request_body = convert_api_request_to_request_body(api_request);
+        match request_body {
+            azure_openai::types::RequestBody::CompletionsRequestBody(body) => {
+                assert_eq!(body.messages.len(), 1);
+                assert_eq!(body.messages[0].role, "user");
+                assert_eq!(body.messages[0].content, "What is the capital of France?");
+                assert_eq!(body.temperature, 0.7);
+                assert_eq!(body.top_p, 1.0);
+                assert_eq!(body.frequency_penalty, 0.0);
+                assert_eq!(body.presence_penalty, 0.0);
+                assert_eq!(body.max_tokens, 1000);
+                assert_eq!(body.stop, None);
+                assert_eq!(body.stream, false);
+            }
+            _ => panic!("Expected CompletionsRequestBody"),
+        }
+    }
+
+    #[test]
+    fn test_convert_api_request_to_request_body_with_azure_search() {
+        init();
+        let api_request = ApiRequestBody {
+            messages: vec![crate::api::types::Message {
+                role: "user".to_string(),
+                content: "What is the capital of France?".to_string(),
+            }],
+            temperature: Some(0.7),
+            top_p: Some(1.0),
+            frequency_penalty: Some(0.0),
+            presence_penalty: Some(0.0),
+            max_tokens: Some(1000),
+            stop: None,
+            azure_search_index_name: Some("test-index".to_string()),
+            deployment: Some("example-deployment".to_string()),
+        };
+        let request_body = convert_api_request_to_request_body(api_request);
+        match request_body {
+            azure_openai::types::RequestBody::ExtensionsRequestBody(body) => {
+                assert_eq!(body.messages.len(), 1);
+                assert_eq!(body.messages[0].role, "user");
+                assert_eq!(body.messages[0].content, "What is the capital of France?");
+                assert_eq!(body.temperature, 0.7);
+                assert_eq!(body.top_p, 1.0);
+                assert_eq!(body.frequency_penalty, 0.0);
+                assert_eq!(body.presence_penalty, 0.0);
+                assert_eq!(body.max_tokens, 1000);
+                assert_eq!(body.stop, None);
+                assert_eq!(body.extensions.is_some(), true);
+                let extensions = body.extensions.unwrap();
+                assert_eq!(extensions.data_sources.len(), 1);
+                assert_eq!(
+                    extensions.data_sources[0].parameters.index_name,
+                    "test-index"
+                );
+                assert_eq!(extensions.deployment, "hy-gpt4-deploy"); // Default value, change later
+            }
+            _ => panic!("Expected ExtensionsRequestBody"),
+        }
+    }
+}
