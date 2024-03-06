@@ -51,36 +51,34 @@ fn convert_api_request_to_extensions_request_body(
         top_p: api_request.top_p.unwrap_or(1.0),
         frequency_penalty: api_request.frequency_penalty.unwrap_or(0.0),
         presence_penalty: api_request.presence_penalty.unwrap_or(0.0),
-        max_tokens: api_request.max_tokens.unwrap_or(150),
+        max_tokens: api_request.max_tokens.unwrap_or(1000),
         stop: api_request.stop,
         stream: false,
         extensions: Some(get_azure_search_extensions(
-            api_request.azure_search_index_name,
+            api_request
+                .azure_search_index_name
+                .unwrap_or("".to_string()),
         )),
     }
 }
 
-fn get_azure_search_extensions(indexe: Option<String>) -> extensions::types::Extensions {
+fn get_azure_search_extensions(index: String) -> extensions::types::Extensions {
     extensions::types::Extensions {
         data_sources: vec![extensions::types::DataSource {
             data_type: "AzureCognitiveSearch".to_string(),
-            parameters: get_azure_search_parameters(),
+            parameters: get_azure_search_parameters(index.clone()),
         }],
         azure_search_endpoint: "https://hy-ai-cognitive-search.search.windows.net".to_string(),
         azure_search_key: std::env::var("AZURE_SEARCH_KEY").unwrap(),
-        azure_search_index_name: if indexe.is_some() {
-            indexe.unwrap()
-        } else {
-            "mooc-5g-index".to_string()
-        },
+        azure_search_index_name: index,
         deployment: "hy-gpt4-deploy".to_string(),
     }
 }
 
-fn get_azure_search_parameters() -> extensions::types::DataSourceParameters {
+fn get_azure_search_parameters(index: String) -> extensions::types::DataSourceParameters {
     extensions::types::DataSourceParameters {
         endpoint: "https://hy-ai-cognitive-search.search.windows.net".to_string(),
-        index_name: "mooc-5g-index".to_string(),
+        index_name: index,
         semantic_configuration: "default".to_string(),
         query_type: "simple".to_string(),
         fields_mapping: HashMap::new(),
