@@ -27,3 +27,21 @@ pub fn check_token(req: HttpRequest) -> Result<(), HttpResponse> {
     }
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use actix_web::http::header;
+    use actix_web::test;
+
+    #[actix_web::test]
+    async fn test_check_token() {
+        let req = test::TestRequest::default()
+            .insert_header((header::AUTHORIZATION, "Bearer token"))
+            .to_http_request();
+        assert_eq!(check_token(req).unwrap_err().status(), 401);
+
+        let req = test::TestRequest::default().to_http_request();
+        assert_eq!(check_token(req).unwrap_err().status(), 400);
+    }
+}
