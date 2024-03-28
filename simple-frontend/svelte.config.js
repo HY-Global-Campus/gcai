@@ -15,7 +15,7 @@ const config = {
 		csrf: {
 			checkOrigin: false,
 		},
-		paths: {base: process.env.BASE_PATH || ''},
+		paths: {base: '/ai-creator'},
 	},
 };
 
