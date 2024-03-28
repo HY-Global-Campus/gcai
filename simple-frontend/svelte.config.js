@@ -15,7 +15,7 @@ const config = {
 		csrf: {
 			checkOrigin: false,
 		},
-		paths: {base: '/ai-creator', assets: '', relative: false},
+		paths: { relative: false},
 	},
 };
 
