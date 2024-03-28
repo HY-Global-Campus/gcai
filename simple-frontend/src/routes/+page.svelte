@@ -1,7 +1,7 @@
 <script lang="ts">
   import axios from 'axios';
   import { onMount } from 'svelte';
-  import { base } from '$app/paths';
+  //import { base } from '$app/paths';
 
   interface Message {
     role: 'system' | 'user' | 'assistant' | 'tool';
