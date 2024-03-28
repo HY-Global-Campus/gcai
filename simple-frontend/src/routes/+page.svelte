@@ -1,6 +1,7 @@
 <script lang="ts">
   import axios from 'axios';
   import { onMount } from 'svelte';
+  import { base } from '$app/paths';
 
   interface Message {
     role: 'system' | 'user' | 'assistant' | 'tool';
@@ -47,7 +48,7 @@
 
     try {
       // Send the request to the proxy endpoint instead of the external API
-      const response = await axios.post('/api', payload);
+      const response = await axios.post(`${base}/api`, payload);
 
       
       // Assuming the server response structure matches what the client expects
@@ -87,28 +88,28 @@
 <style>
 @font-face {
     font-family: 'Gotham Narrow';
-    src: url('/fonts/Gotham-Narrow-Font-Family/GothamNarrow-Regular.woff') format('woff');
+    src: url('fonts/Gotham-Narrow-Font-Family/GothamNarrow-Regular.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Gotham Narrow';
-    src: url('/fonts/Gotham-Narrow-Font-Family/GothamNarrow-Bold.woff') format('woff');
+    src: url('fonts/Gotham-Narrow-Font-Family/GothamNarrow-Bold.woff') format('woff');
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Gotham Narrow';
-    src: url('/fonts/Gotham-Narrow-Font-Family/GothamNarrow-Italic.woff') format('woff');
+    src: url('fonts/Gotham-Narrow-Font-Family/GothamNarrow-Italic.woff') format('woff');
     font-weight: normal;
     font-style: italic;
 }
 
 @font-face {
     font-family: 'Gotham Narrow';
-    src: url('/fonts/Gotham-Narrow-Font-Family/GothamNarrow-BoldItalic.woff') format('woff');
+    src: url('fonts/Gotham-Narrow-Font-Family/GothamNarrow-BoldItalic.woff') format('woff');
     font-weight: bold;
     font-style: italic;
   }  
