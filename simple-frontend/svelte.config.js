@@ -15,7 +15,7 @@ const config = {
 		csrf: {
 			checkOrigin: false,
 		},
-		paths: {base: ''},
+		paths: {base: './'},
 	},
 };
 
