@@ -3,6 +3,7 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [sveltekit()],
+	base: '/ai-creator/',
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	}

@@ -1,5 +1,6 @@
 {
 	"name": "simple-frontend",
+	"homepage": "/ai-creator",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
