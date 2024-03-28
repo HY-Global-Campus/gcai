@@ -48,7 +48,7 @@
 
     try {
       // Send the request to the proxy endpoint instead of the external API
-      const response = await axios.post(`${base}/api`, payload);
+      const response = await axios.post(`/ai-creator/api`, payload);
 
       
       // Assuming the server response structure matches what the client expects
