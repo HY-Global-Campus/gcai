@@ -82,7 +82,7 @@ fn get_azure_search_parameters(index: String) -> extensions::types::DataSourcePa
         semantic_configuration: "default".to_string(),
         query_type: "simple".to_string(),
         fields_mapping: HashMap::new(),
-        in_scope: true,
+        in_scope: false,
         role_information: "You are an AI assistant that helps people find information.".to_string(),
         filter: None,
         strictness: 3,
