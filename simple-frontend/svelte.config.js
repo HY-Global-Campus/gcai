@@ -16,7 +16,7 @@ const config = {
 			checkOrigin: false,
 		},
 		paths: {
-			base: '/ai-creator/',
+			base: '/ai-creator',
 		}
 	},
 };
