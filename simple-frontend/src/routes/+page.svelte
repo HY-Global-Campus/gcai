@@ -79,7 +79,7 @@
 	});
 </script>
 
-<Router basepath="/ai-creator">
+<Router>
 	<div class="banner">
 		<h1>AI Creator</h1>
 		<div class="logo"></div>
