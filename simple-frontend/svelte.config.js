@@ -13,7 +13,6 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 		paths: {
-			assets: 'http://4.225.90.153/ai-creator',
 		}
 	},
 };
