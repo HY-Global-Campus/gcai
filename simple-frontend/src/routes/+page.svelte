@@ -46,7 +46,7 @@
 
 		try {
 			// Send the request to the proxy endpoint instead of the external API
-			const response = await axios.post(`/ai-creator/api`, payload);
+			const response = await axios.post(`/api`, payload);
 
 			// Assuming the server response structure matches what the client expects
 			console.log(response.data);
@@ -79,7 +79,7 @@
 	});
 </script>
 
-<Router basepath="/ai-creator">
+<Router>
 	<div class="banner">
 		<h1>AI Creator</h1>
 		<div class="logo"></div>
