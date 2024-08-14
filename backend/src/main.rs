@@ -12,7 +12,6 @@ async fn index() -> impl Responder {
 
 #[post("/api/chat")]
 async fn chat(data: web::Json<api::types::ApiRequestBody>, req: HttpRequest) -> impl Responder {
-    println!("Got request");
     if let Err(response) = auth::check_token(req) {
         return response;
     }
