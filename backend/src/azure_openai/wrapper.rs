@@ -35,7 +35,7 @@ pub async fn send_completion_request_to_openai(
 
     let api_key = std::env::var("OPENAI_API_KEY")?;
     let api_base = std::env::var("OPENAI_API_BASE")?;
-    let api_url = types::Url::CompletionUrl.to_string(api_base, "hy-gpt4-deploy".to_string());
+    let api_url = types::Url::CompletionUrl.to_string(api_base, "gpt-4o".to_string());
     match serde_json::to_string(&body) {
         Ok(json_string) => println!("Request body as JSON: {}", json_string),
         Err(e) => println!("Error serializing body to JSON: {}", e),
@@ -67,7 +67,7 @@ pub async fn send_extension_request_to_openai(
 
     let api_key = std::env::var("OPENAI_API_KEY")?;
     let api_base = std::env::var("OPENAI_API_BASE")?;
-    let api_url = types::Url::ExtensionsUrl.to_string(api_base, "hy-gpt4-deploy".to_string());
+    let api_url = types::Url::ExtensionsUrl.to_string(api_base, "gpt-4o".to_string());
 
     match serde_json::to_string(&body) {
         Ok(json_string) => println!("Request body as JSON: {}", json_string),
