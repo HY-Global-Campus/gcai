@@ -70,7 +70,7 @@ pub struct ResponseBody {
     pub prompt_filter_results: Option<Vec<PromptFilterResult>>,
     pub choices: Vec<Choice>,
     pub usage: Usage,
-    pub system_fingerprint: Option<bool>,
+    pub system_fingerprint: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
