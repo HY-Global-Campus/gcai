@@ -36,6 +36,7 @@ pub async fn send_completion_request_to_openai(
     let api_key = std::env::var("OPENAI_API_KEY")?;
     let api_base = std::env::var("OPENAI_API_BASE")?;
     let api_url = types::Url::CompletionUrl.to_string(api_base, "gpt-4o".to_string());
+    println!("api_url {}", api_url);
     match serde_json::to_string(&body) {
         Ok(json_string) => println!("Request body as JSON: {}", json_string),
         Err(e) => println!("Error serializing body to JSON: {}", e),
@@ -110,12 +111,14 @@ mod tests {
         let mut server = mockito::Server::new();
         let address = format!("http://{}", server.host_with_port());
         init(&address);
-        let completion_url =
-            types::Url::CompletionUrl.to_string(address, "hy-gpt4-deploy".to_string());
+        let completion_url = types::Url::CompletionUrl.to_string(address, "gpt-4o".to_string());
         println!("Completion URL: {}", completion_url);
 
         let mock = server
-            .mock("POST", "/openai/deployments/hy-gpt4-deploy/chat/completions?api-version=2023-07-01-preview")
+            .mock(
+                "POST",
+                "/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-01",
+            )
             .match_header("api-key", "test-api-key")
             .with_header("content-type", "application/json")
             .with_body(
@@ -124,7 +127,7 @@ mod tests {
                     "choices": [
                         {
                             "finish_reason": "length",
-                            "index": 0,
+                            "index": 1,
                             "content_filter_results": null,
                             "message": {
                                 "role": "system",
@@ -135,7 +138,7 @@ mod tests {
                     "id": "test-id",
                     "object": "text_completion",
                     "created": 1630000,
-                    "model": "hy-gpt4-deploy",
+                    "model": "gpt-4o",
                     "prompt_filter_results": null,
                     "usage": {
                         "total_tokens": 10,
@@ -172,12 +175,14 @@ mod tests {
         let mut server = mockito::Server::new();
         let address = format!("http://{}", server.host_with_port());
         init(&address);
-        let extension_url =
-            types::Url::ExtensionsUrl.to_string(address, "hy-gpt4-deploy".to_string());
+        let extension_url = types::Url::ExtensionsUrl.to_string(address, "gpt-4o".to_string());
         println!("Extension URL: {}", extension_url);
 
         let mock = server
-            .mock("POST", "/openai/deployments/hy-gpt4-deploy/extensions/chat/completions?api-version=2023-07-01-preview")
+            .mock(
+                "POST",
+                "/openai/deployments/gpt-4o/extensions/chat/completions?api-version=2024-02-01",
+            )
             .match_header("api-key", "test-api-key")
             .with_header("content-type", "application/json")
             .with_body(
@@ -200,7 +205,7 @@ mod tests {
                     "id": "test-id",
                     "object": "text_completion",
                     "created": 1630000,
-                    "model": "hy-gpt4-deploy",
+                    "model": "gpt-4o",
                     "usage": {
                         "total_tokens": 10,
                         "prompt_tokens": 3,

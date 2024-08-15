@@ -71,7 +71,7 @@ fn get_azure_search_extensions(index: String) -> extensions::types::Extensions {
         azure_search_endpoint: "https://hy-ai-cognitive-search.search.windows.net".to_string(),
         azure_search_key: std::env::var("AZURE_SEARCH_KEY").unwrap(),
         azure_search_index_name: index,
-        deployment: "hy-gpt4-deploy".to_string(),
+        deployment: "gpt-4o".to_string(),
     }
 }
 
@@ -273,7 +273,7 @@ mod tests {
                     extensions.data_sources[0].parameters.index_name,
                     "test-index"
                 );
-                assert_eq!(extensions.deployment, "hy-gpt4-deploy"); // Default value, change later
+                assert_eq!(extensions.deployment, "gpt-4o"); // Default value, change later
             }
             _ => panic!("Expected ExtensionsRequestBody"),
         }

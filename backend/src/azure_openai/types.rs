@@ -13,12 +13,15 @@ impl Url {
         match self {
             Url::CompletionUrl => {
                 format!(
-                    "{}/openai/deployments/{}/chat/completions?api-version=2023-07-01-preview",
+                    "{}/openai/deployments/{}/chat/completions?api-version=2024-02-01",
                     api_base, deployment
                 )
             }
             Url::ExtensionsUrl => {
-                format!("{}/openai/deployments/{}/extensions/chat/completions?api-version=2023-07-01-preview", api_base, deployment)
+                format!(
+                    "{}/openai/deployments/{}/extensions/chat/completions?api-version=2024-02-01",
+                    api_base, deployment
+                )
             }
         }
     }
