@@ -126,7 +126,7 @@ fn convert_completions_response_body_to_api_response(
     response_body: completions::types::ResponseBody,
 ) -> crate::api::types::ApiResponseBody {
     crate::api::types::ApiResponseBody {
-        id: response_body.id,
+        id: response_body.id.unwrap_or("".to_string()),
         created: response_body.created,
         choices: response_body
             .choices
