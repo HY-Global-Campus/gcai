@@ -63,7 +63,7 @@ pub struct DataSourceParameters {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ResponseBody {
-    pub id: String,
+    pub id: Option<String>,
     pub object: String,
     pub created: u64,
     pub model: String,
