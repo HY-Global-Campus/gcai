@@ -14,5 +14,7 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1", features = ["full"] }
 thiserror = "1.0"
+async-trait = "0.1.83"
+azure_openai_api = { path = "src/openapi_clients/azure_openai_client" }
 [dev-dependencies]
 mockito = "1.2"

@@ -1,0 +1,12 @@
+# ContentFilterDetectionResult
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**filtered** | **bool** | A value indicating whether or not the content has been filtered. | 
+**detected** | **bool** | A value indicating whether detection occurred, irrespective of severity or whether the content was filtered. | 
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

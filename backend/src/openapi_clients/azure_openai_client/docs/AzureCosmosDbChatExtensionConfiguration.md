@@ -1,0 +1,12 @@
+# AzureCosmosDbChatExtensionConfiguration
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**parameters** | [**models::AzureCosmosDbChatExtensionParameters**](AzureCosmosDBChatExtensionParameters.md) |  | 
+**r#type** | [**models::AzureChatExtensionType**](AzureChatExtensionType.md) |  | 
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

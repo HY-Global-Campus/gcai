@@ -3,7 +3,12 @@ use dotenv;
 pub mod api;
 pub mod auth;
 pub mod azure_openai;
+mod entities;
 pub mod helpers;
+mod interface_adapters;
+mod plugin_manager;
+mod plugins;
+mod use_cases;
 
 #[get("/")]
 async fn index() -> impl Responder {

@@ -1,0 +1,15 @@
+# ChatResponseMessage
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**role** | [**models::ChatRole**](ChatRole.md) |  | 
+**content** | Option<**String**> | The content of the message. | 
+**tool_calls** | Option<[**Vec<models::ChatCompletionsToolCall>**](ChatCompletionsToolCall.md)> | The tool calls that must be resolved and have their outputs appended to subsequent input messages for the chat completions request to resolve as configured. | [optional]
+**function_call** | Option<[**models::FunctionCall**](FunctionCall.md)> |  | [optional]
+**context** | Option<[**models::AzureChatExtensionsMessageContext**](AzureChatExtensionsMessageContext.md)> |  | [optional]
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
