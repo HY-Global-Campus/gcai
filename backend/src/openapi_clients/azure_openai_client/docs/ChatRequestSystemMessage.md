@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | **String** | The contents of the system message. | 
+**content** | [**serde_json::Value**](.md) | The contents of the system message. | 
 **name** | Option<**String**> | An optional name for the participant. | [optional]
 **role** | [**models::ChatRole**](ChatRole.md) |  | 
 

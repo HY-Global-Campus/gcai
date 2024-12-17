@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **error** | Option<[**models::AzurePeriodCorePeriodFoundationsPeriodError**](Azure.Core.Foundations.Error.md)> |  | [optional]
 **protected_material_text** | Option<[**models::ContentFilterDetectionResult**](ContentFilterDetectionResult.md)> |  | [optional]
 **protected_material_code** | Option<[**models::ContentFilterCitedDetectionResult**](ContentFilterCitedDetectionResult.md)> |  | [optional]
+**ungrounded_material** | Option<[**models::ContentFilterCompletionTextSpanResult**](ContentFilterCompletionTextSpanResult.md)> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

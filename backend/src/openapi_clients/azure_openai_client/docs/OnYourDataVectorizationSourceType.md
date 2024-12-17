@@ -7,6 +7,7 @@
 | Endpoint | endpoint |
 | DeploymentName | deployment_name |
 | ModelId | model_id |
+| Integrated | integrated |
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | Option<**String**> | The content of the message. | 
+**content** | [**serde_json::Value**](.md) | The content of the message. | 
 **tool_call_id** | **String** | The ID of the tool call resolved by the provided content. | 
 **role** | [**models::ChatRole**](ChatRole.md) |  | 
 

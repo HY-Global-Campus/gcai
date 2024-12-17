@@ -11,6 +11,7 @@
 | AccessToken | access_token |
 | SystemAssignedManagedIdentity | system_assigned_managed_identity |
 | UserAssignedManagedIdentity | user_assigned_managed_identity |
+| UsernameAndPassword | username_and_password |
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

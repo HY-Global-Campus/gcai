@@ -19,7 +19,9 @@ Name | Type | Description | Notes
 **frequency_penalty** | Option<**f32**> | A value that influences the probability of generated tokens appearing based on their cumulative frequency in generated text. Positive values will make tokens less likely to appear as their frequency increases and decrease the likelihood of the model repeating the same statements verbatim. | [optional]
 **best_of** | Option<**i32**> | A value that controls how many completions will be internally generated prior to response formulation. When used together with n, best_of controls the number of candidate completions and must be greater than n. Because this setting can generate many completions, it may quickly consume your token quota. Use carefully and ensure reasonable settings for max_tokens and stop. | [optional]
 **stream** | Option<**bool**> | A value indicating whether chat completions should be streamed for this request. | [optional]
+**stream_options** | Option<[**models::ChatCompletionStreamOptions**](ChatCompletionStreamOptions.md)> | Options for streaming response. Only set this when you set `stream: true`. | [optional]
 **model** | Option<**String**> | The model name to provide as part of this completions request. Not applicable to Azure OpenAI, where deployment information should be included in the Azure resource URI that's connected to. | [optional]
+**seed** | Option<**i32**> | If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same `seed` and parameters should return the same result.  Determinism is not guaranteed, and you should refer to the `system_fingerprint` response parameter to monitor changes in the backend. | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
