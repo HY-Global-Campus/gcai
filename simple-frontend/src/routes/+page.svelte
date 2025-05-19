@@ -358,8 +358,9 @@
 
 	.box {
 		border: 1px solid #ccc;
-		border-radius: 10px;
 		padding: 20px;
+		margin: 10px;
+		width: 95%;
 	}
 
 	.input-group {
@@ -397,8 +398,9 @@
 		border: 1px solid #ccc;
 		padding: 20px;
 		border-radius: 10px;
-		height: 300px;
-		overflow-y: auto;
+		height: 60vh;
+		max-height: 70%;
+		overflow-y: scroll;
 		display: flex;
 		flex-direction: column;
 	}
