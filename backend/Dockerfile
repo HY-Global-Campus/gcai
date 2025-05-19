@@ -1,4 +1,4 @@
-FROM rust:1.76 as build
+FROM rust:1.85 AS build
 ENV PKG_CONFIG_ALLOW_CROSS=1
 
 WORKDIR /usr/src/gcai-backend

@@ -4,6 +4,8 @@ pub mod api;
 pub mod auth;
 pub mod azure_openai;
 pub mod helpers;
+pub mod v2api;
+pub mod v2azure_openai;
 
 #[get("/")]
 async fn index() -> impl Responder {
@@ -31,11 +33,39 @@ async fn chat(data: web::Json<api::types::ApiRequestBody>, req: HttpRequest) -> 
     }
 }
 
+#[post("/api/v2/azure_openai/chat_completion")]
+async fn v2_chat_completion(
+    data: web::Json<v2api::types::ApiRequestBody>,
+    req: HttpRequest,
+) -> impl Responder {
+    if let Err(response) = auth::check_token(req) {
+        return response;
+    }
+    println!("v2_chat_completion data: {:?}", data);
+
+    let api_request_body = data.into_inner();
+    match v2azure_openai::wrapper::send_completion_request_to_openai(api_request_body).await {
+        Ok(response) => {
+            println!("Response: {:?}", response);
+            HttpResponse::Ok().json(response)
+        }
+        Err(e) => {
+            eprintln!("Error sending request to OpenAI: {:?}", e);
+            HttpResponse::InternalServerError().body("Error: Invalid request.")
+        }
+    }
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
-    HttpServer::new(|| App::new().service(chat).service(index))
-        .bind(("0.0.0.0", 8080))?
-        .run()
-        .await
+    HttpServer::new(|| {
+        App::new()
+            .service(chat)
+            .service(index)
+            .service(v2_chat_completion)
+    })
+    .bind(("0.0.0.0", 8080))?
+    .run()
+    .await
 }
