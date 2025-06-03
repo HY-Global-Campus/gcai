@@ -26,6 +26,7 @@ pub struct SkillResponse {
 
 #[derive(Serialize)]
 pub struct SkillResponseRecord {
+    #[serde(rename = "recordId")]
     pub record_id: String,
     pub data: SkillResponseData,
 }
