@@ -1,35 +1,35 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize)]
 pub struct SkillRequest {
-    pub values: Vec<Record>,
+    values: Vec<Record>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize)]
 pub struct Record {
-    pub record_id: String,
-    pub data: RecordData,
+    record_id: Option<String>,
+    data: Option<RecordData>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize)]
 pub struct RecordData {
-    pub metadata_title: Option<String>,
-    pub metadata_author: Option<String>,
-    pub content: Option<String>,
+    metadata_title: Option<String>,
+    metadata_author: Option<String>,
+    content: Option<String>,
 }
 
 #[derive(Serialize)]
 pub struct SkillResponse {
-    pub values: Vec<SkillResponseRecord>,
+    values: Vec<SkillResponseRecord>,
 }
 
 #[derive(Serialize)]
 pub struct SkillResponseRecord {
-    pub record_id: String,
-    pub data: SkillResponseData,
+    record_id: String,
+    data: SkillResponseData,
 }
 
 #[derive(Serialize)]
 pub struct SkillResponseData {
-    pub merged_content: String,
+    merged_content: String,
 }
