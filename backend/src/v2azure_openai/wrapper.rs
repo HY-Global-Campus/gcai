@@ -73,6 +73,5 @@ fn inject_azure_search_key(
             }
         }
     }
-    println!("body after azure key injection: {:?}", body);
     Ok(())
 }

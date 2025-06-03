@@ -4,6 +4,7 @@ pub mod api;
 pub mod auth;
 pub mod azure_openai;
 pub mod helpers;
+pub mod skills;
 pub mod v2api;
 pub mod v2azure_openai;
 
@@ -64,6 +65,10 @@ async fn main() -> std::io::Result<()> {
             .service(chat)
             .service(index)
             .service(v2_chat_completion)
+            .route(
+                "/skills/merge_pdf_metadata",
+                web::post().to(skills::merge_pdf_metadata::function::run),
+            )
     })
     .bind(("0.0.0.0", 8080))?
     .run()
