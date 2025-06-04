@@ -16,11 +16,8 @@ pub async fn run(req: web::Json<SkillRequest>) -> Result<impl Responder, MergeEr
         }
 
         let title: &str = record.data.metadata_title.as_deref().unwrap_or("").trim();
-
         let author: &str = record.data.metadata_author.as_deref().unwrap_or("").trim();
-
         let content: &str = record.data.content.as_deref().unwrap_or("");
-
         let prefix_len = "Title: ".len() + "\nAuthor: ".len() + "\n\n".len();
         let capacity = prefix_len + title.len() + author.len() + content.len();
 
