@@ -4,7 +4,7 @@ use log::{info, warn};
 
 pub async fn run(req: web::Json<SkillRequest>) -> Result<impl Responder, MergeError> {
     if req.values.is_empty() {
-        warn!("Received an empty `values` array—returning an empty response.");
+        warn!("skill::merge_pdf_metadata::Received an empty `values` array—returning an empty response.");
         return Ok(HttpResponse::Ok().json(SkillResponse { values: Vec::new() }));
     }
 
@@ -36,6 +36,9 @@ pub async fn run(req: web::Json<SkillRequest>) -> Result<impl Responder, MergeEr
         });
     }
 
-    info!("Successfully merged {} records", responses.len());
+    info!(
+        "skill::merge_pdf_metadata::Successfully merged {} records",
+        responses.len()
+    );
     Ok(HttpResponse::Ok().json(SkillResponse { values: responses }))
 }
