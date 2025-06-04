@@ -711,6 +711,7 @@ dependencies = [
  "actix-web",
  "dotenv",
  "futures",
+ "log",
  "mockito",
  "reqwest",
  "serde",

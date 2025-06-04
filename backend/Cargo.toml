@@ -15,5 +15,6 @@ serde_json = "1.0"
 tokio = { version = "1", features = ["full"] }
 thiserror = "1.0"
 serde_with = "3.12"
+log = "0.4"
 [dev-dependencies]
 mockito = "1.2"
