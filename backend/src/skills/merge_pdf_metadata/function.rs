@@ -1,18 +1,21 @@
-use crate::skills::merge_pdf_metadata::types::*;
+use crate::skills::merge_pdf_metadata::types::{MergeData, MergeResponseData};
+use crate::skills::types::{SkillError, SkillRequest, SkillResponse, SkillResponseRecord};
 use actix_web::{web, HttpResponse, Responder};
 use log::{info, warn};
 
-pub async fn run(req: web::Json<SkillRequest>) -> Result<impl Responder, MergeError> {
+pub async fn run(req: web::Json<SkillRequest<MergeData>>) -> Result<impl Responder, SkillError> {
     if req.values.is_empty() {
         warn!("skill::merge_pdf_metadata::Received an empty `values` array—returning an empty response.");
-        return Ok(HttpResponse::Ok().json(SkillResponse { values: Vec::new() }));
+        return Ok(
+            HttpResponse::Ok().json(SkillResponse::<MergeResponseData> { values: Vec::new() })
+        );
     }
 
     let mut responses = Vec::with_capacity(req.values.len());
 
     for record in &req.values {
         if record.record_id.trim().is_empty() {
-            return Err(MergeError::MissingRecordId);
+            return Err(SkillError::MissingRecordId);
         }
 
         let title: &str = record.data.metadata_title.as_deref().unwrap_or("").trim();
@@ -32,7 +35,7 @@ pub async fn run(req: web::Json<SkillRequest>) -> Result<impl Responder, MergeEr
 
         responses.push(SkillResponseRecord {
             record_id: record.record_id.clone(),
-            data: SkillResponseData { merged_content },
+            data: MergeResponseData { merged_content },
         });
     }
 
