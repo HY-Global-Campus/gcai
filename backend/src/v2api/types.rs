@@ -7,7 +7,7 @@ pub struct Message {
 }
 
 #[serde_with::skip_serializing_none]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Default)]
 pub struct ApiRequestBody {
     pub messages: Vec<Message>,
     pub azure_search_index_name: Option<String>,

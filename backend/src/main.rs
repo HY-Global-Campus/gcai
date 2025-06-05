@@ -69,6 +69,10 @@ async fn main() -> std::io::Result<()> {
                 "/skills/merge_pdf_metadata",
                 web::post().to(skills::merge_pdf_metadata::function::run),
             )
+            .route(
+                "/skills/find_author_title",
+                web::post().to(skills::find_author_title::function::run),
+            )
     })
     .bind(("0.0.0.0", 8080))?
     .run()
