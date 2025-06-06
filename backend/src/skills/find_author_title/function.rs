@@ -1,5 +1,7 @@
 use crate::skills::find_author_title::types::{FindAuthorTitleData, FindAuthorTitleResponseData};
-use crate::skills::types::{SkillError, SkillRequest, SkillResponse, SkillResponseRecord};
+use crate::skills::types::{
+    SkillError, SkillRequest, SkillResponse, SkillResponseRecord, SkillResponseRecordInfoMessage,
+};
 use crate::v2api::types::{ApiRequestBody, Message};
 use crate::v2azure_openai::wrapper;
 use crate::v2azure_openai::wrapper::OpenAiError;
@@ -63,10 +65,10 @@ pub async fn run(
                             data: FindAuthorTitleResponseData {
                                 author_title: "error with openai".to_string(),
                             },
-                            warnings: Some(vec![format!(
+                            warnings: Some(vec![SkillResponseRecordInfoMessage{message: format!(
                                 "Failed to process record {} after {} attempts: {:?}",
                                 record_id, MAX_RETRIES, e
-                            )]),
+                            )}]),
                             errors: None
                         })
                     }
@@ -80,10 +82,10 @@ pub async fn run(
                             data: FindAuthorTitleResponseData {
                                 author_title: "unknown | unknown".to_string(),
                             },
-                            warnings: Some(vec![format!(
+                            warnings: Some(vec![SkillResponseRecordInfoMessage{ message: format!(
                                 "No author or title found for record {}",
                                 record_id
-                            )]),
+                            )}]),
                             errors: None,
 
                         })
