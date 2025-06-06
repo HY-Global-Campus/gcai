@@ -8,6 +8,8 @@ use crate::v2azure_openai::wrapper::OpenAiError;
 use actix_web::{web, HttpResponse, Responder};
 use futures::future::join_all;
 use log::{error, info, warn};
+use std::time::Duration;
+use tokio::time::sleep;
 
 const MAX_RETRIES: usize = 3;
 
@@ -47,6 +49,8 @@ pub async fn run(
                                 "skill::find_title_author::Error on record {} (attempt {}/{}): {:?}. Retrying...",
                                 record_id, attempts, MAX_RETRIES, err
                             );
+                            info!("Async sleeping for 45s in a future to avoid rate limiting");
+                            sleep(Duration::from_secs(45)).await;
                         }
                         Err(err) => {
                             break Err(err);
