@@ -158,16 +158,16 @@ async fn ask_openai(content: String) -> Result<String, OpenAiError> {
 
     match response {
         Ok(api_response) => {
-            if let Some(choice) = api_response.choices.first() {
-                if let Some(message) = choice.get("message") {
-                    if let Some(content) = message.get("content") {
-                        if let Some(author_title) = content.as_str() {
-                            return Ok(author_title.to_string());
-                        }
-                    }
-                }
-            }
-            Ok(String::new())
+            let author_title = api_response
+                .choices
+                .first() // Option<&Choice>
+                .and_then(|choice| choice.get("message")) // Option<&serde_json::Value>
+                .and_then(|message| message.get("content")) // Option<&serde_json::Value>
+                .and_then(|content| content.as_str()) // Option<&str>
+                .map(|s| s.to_string()) // Option<String>
+                .unwrap_or_default(); // "" if any step was None
+
+            Ok(author_title)
         }
         Err(e) => {
             error!("Error sending request to OpenAI: {:?}", e);
