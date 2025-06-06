@@ -34,12 +34,13 @@ pub async fn run(
         .map(|record| {
             let record_id = record.record_id.clone();
             let content = record.data.content.clone().unwrap_or_default();
+            let truncated: String = content.chars().take(10000).collect();
 
             async move {
                 let mut attempts = 0;
 
                 let author_title_result: Result<String, OpenAiError> = loop {
-                    match ask_openai(content.clone()).await {
+                    match ask_openai(truncated.clone()).await {
                         Ok(title) => {
                             break Ok(title);
                         }
