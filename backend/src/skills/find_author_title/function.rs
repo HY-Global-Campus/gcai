@@ -34,7 +34,7 @@ pub async fn run(
         .map(|record| {
             let record_id = record.record_id.clone();
             let content = record.data.content.clone().unwrap_or_default();
-            let truncated: String = content.chars().take(10000).collect();
+            let truncated: String = content.chars().take(1000).collect();
 
             async move {
                 let mut attempts = 0;
