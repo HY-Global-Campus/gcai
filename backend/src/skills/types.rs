@@ -24,6 +24,8 @@ pub struct SkillResponseRecord<T> {
     #[serde(rename = "recordId")]
     pub record_id: String,
     pub data: T,
+    pub errors: Option<Vec<String>>,
+    pub warnings: Option<Vec<String>>,
 }
 
 #[derive(Debug)]

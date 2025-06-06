@@ -2,9 +2,12 @@ use crate::skills::find_author_title::types::{FindAuthorTitleData, FindAuthorTit
 use crate::skills::types::{SkillError, SkillRequest, SkillResponse, SkillResponseRecord};
 use crate::v2api::types::{ApiRequestBody, Message};
 use crate::v2azure_openai::wrapper;
+use crate::v2azure_openai::wrapper::OpenAiError;
 use actix_web::{web, HttpResponse, Responder};
 use futures::future::join_all;
-use log::{info, warn};
+use log::{error, info, warn};
+
+const MAX_RETRIES: usize = 3;
 
 pub async fn run(
     req: web::Json<SkillRequest<FindAuthorTitleData>>,
@@ -29,28 +32,96 @@ pub async fn run(
             let content = record.data.content.clone().unwrap_or_default();
 
             async move {
-                let author_title = ask_openai(content).await;
-                Ok::<SkillResponseRecord<FindAuthorTitleResponseData>, SkillError>(
-                    SkillResponseRecord {
-                        record_id,
-                        data: FindAuthorTitleResponseData {
-                            author_title: format!("{}", author_title),
-                        },
-                    },
-                )
+                let mut attempts = 0;
+
+                let author_title_result: Result<String, OpenAiError> = loop {
+                    match ask_openai(content.clone()).await {
+                        Ok(title) => {
+                            break Ok(title);
+                        }
+                        Err(err) if attempts < MAX_RETRIES => {
+                            attempts += 1;
+                            warn!(
+                                "skill::find_title_author::Error on record {} (attempt {}/{}): {:?}. Retrying...",
+                                record_id, attempts, MAX_RETRIES, err
+                            );
+                        }
+                        Err(err) => {
+                            break Err(err);
+                        }
+                    }
+                };
+
+                match author_title_result {
+                    Err(e) => {
+                        error!(
+                            "skill::find_title_author::Failed to process record {} after {} attempts: {:?}",
+                            record_id, MAX_RETRIES, e
+                        );
+                        Ok(SkillResponseRecord {
+                            record_id: record_id.clone(),
+                            data: FindAuthorTitleResponseData {
+                                author_title: "error with openai".to_string(),
+                            },
+                            warnings: Some(vec![format!(
+                                "Failed to process record {} after {} attempts: {:?}",
+                                record_id, MAX_RETRIES, e
+                            )]),
+                            errors: None
+                        })
+                    }
+                    Ok(author_title) if author_title.is_empty() => {
+                        warn!(
+                            "skill::find_title_author::No author or title found for record {}",
+                            record_id
+                        );
+                        Ok(SkillResponseRecord {
+                            record_id: record_id.clone(),
+                            data: FindAuthorTitleResponseData {
+                                author_title: "unknown | unknown".to_string(),
+                            },
+                            warnings: Some(vec![format!(
+                                "No author or title found for record {}",
+                                record_id
+                            )]),
+                            errors: None,
+
+                        })
+                    }
+                    Ok(author_title) => {
+                        info!(
+                            "skill::find_title_author::Successfully processed record {}",
+                            record_id
+                        );
+                        Ok::<SkillResponseRecord<FindAuthorTitleResponseData>, SkillError>(
+                            SkillResponseRecord {
+                                record_id,
+                                data: FindAuthorTitleResponseData {
+                                    author_title,
+                                },
+                                warnings: None,
+                                errors: None,
+                            },
+                        )
+                    }
+                }
             }
         })
         .collect::<Vec<_>>();
 
+    // 3) Await them all in parallel
     let results: Vec<Result<SkillResponseRecord<FindAuthorTitleResponseData>, SkillError>> =
         join_all(futures_vec).await;
 
+    // 4) Collect successful records or short-circuit on a SkillError
     let mut responses = Vec::with_capacity(results.len());
-    for res in results.into_iter() {
+    for res in results {
         match res {
-            Ok(record) => responses.push(record),
-            Err(e) => {
-                return Err(e);
+            Ok(rec) => responses.push(rec),
+            Err(err) => {
+                // If any of the retries returned a SkillError that we didn't catch above,
+                // bubble it up so the entire skill invocation fails
+                return Err(err);
             }
         }
     }
@@ -62,9 +133,9 @@ pub async fn run(
     Ok(HttpResponse::Ok().json(SkillResponse { values: responses }))
 }
 
-async fn ask_openai(content: String) -> String {
+async fn ask_openai(content: String) -> Result<String, OpenAiError> {
     if content.is_empty() {
-        return String::new();
+        return Ok(String::new());
     }
     let api_request_body = ApiRequestBody {
         messages: vec![
@@ -89,16 +160,16 @@ async fn ask_openai(content: String) -> String {
                 if let Some(message) = choice.get("message") {
                     if let Some(content) = message.get("content") {
                         if let Some(author_title) = content.as_str() {
-                            return author_title.to_string();
+                            return Ok(author_title.to_string());
                         }
                     }
                 }
             }
-            String::new()
+            Ok(String::new())
         }
         Err(e) => {
-            eprintln!("Error sending request to OpenAI: {:?}", e);
-            "error in parsing title and author data".to_string()
+            error!("Error sending request to OpenAI: {:?}", e);
+            Err(e)
         }
     }
 }

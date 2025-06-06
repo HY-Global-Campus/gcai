@@ -36,6 +36,8 @@ pub async fn run(req: web::Json<SkillRequest<MergeData>>) -> Result<impl Respond
         responses.push(SkillResponseRecord {
             record_id: record.record_id.clone(),
             data: MergeResponseData { merged_content },
+            warnings: None,
+            errors: None,
         });
     }
 
