@@ -160,12 +160,12 @@ async fn ask_openai(content: String) -> Result<String, OpenAiError> {
         Ok(api_response) => {
             let author_title = api_response
                 .choices
-                .first() // Option<&Choice>
-                .and_then(|choice| choice.get("message")) // Option<&serde_json::Value>
-                .and_then(|message| message.get("content")) // Option<&serde_json::Value>
-                .and_then(|content| content.as_str()) // Option<&str>
-                .map(|s| s.to_string()) // Option<String>
-                .unwrap_or_default(); // "" if any step was None
+                .first()
+                .and_then(|choice| choice.get("message"))
+                .and_then(|message| message.get("content"))
+                .and_then(|content| content.as_str())
+                .map(|s| s.to_string())
+                .unwrap_or_default();
 
             Ok(author_title)
         }
