@@ -115,18 +115,14 @@ pub async fn run(
         })
         .collect::<Vec<_>>();
 
-    // 3) Await them all in parallel
     let results: Vec<Result<SkillResponseRecord<FindAuthorTitleResponseData>, SkillError>> =
         join_all(futures_vec).await;
 
-    // 4) Collect successful records or short-circuit on a SkillError
     let mut responses = Vec::with_capacity(results.len());
     for res in results {
         match res {
             Ok(rec) => responses.push(rec),
             Err(err) => {
-                // If any of the retries returned a SkillError that we didn't catch above,
-                // bubble it up so the entire skill invocation fails
                 return Err(err);
             }
         }
