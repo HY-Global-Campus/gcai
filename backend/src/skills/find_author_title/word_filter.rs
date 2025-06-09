@@ -1,7 +1,7 @@
 static WORD_LIST: &[&str] = &["open access"];
 
 pub fn filter_and_truncate(input: String) -> String {
-    let truncated: String = input.chars().take(1_000).collect();
+    let truncated: String = input.chars().take(2_000).collect();
 
     let tokens: Vec<&str> = truncated.split_whitespace().collect();
 
