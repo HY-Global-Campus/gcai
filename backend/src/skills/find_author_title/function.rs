@@ -1,4 +1,5 @@
-use crate::skills::find_author_title::types::{FindAuthorTitleData, FindAuthorTitleResponseData};
+use super::types::{FindAuthorTitleData, FindAuthorTitleResponseData};
+use super::word_filter::filter_and_truncate;
 use crate::skills::types::{
     SkillError, SkillRequest, SkillResponse, SkillResponseRecord, SkillResponseRecordInfoMessage,
 };
@@ -32,7 +33,7 @@ pub async fn run(
         .map(|record| {
             let record_id = record.record_id.clone();
             let content = record.data.content.clone().unwrap_or_default();
-            let truncated: String = content.chars().take(1000).collect();
+            let truncated: String = filter_and_truncate(content);
 
             async move {
                 let mut attempts = 0;
