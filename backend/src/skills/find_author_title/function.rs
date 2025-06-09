@@ -141,7 +141,8 @@ async fn ask_openai(content: String) -> Result<String, OpenAiError> {
         messages: vec![
             Message {
                 role: "system".to_string(),
-                content: "You will get a contents of a article. Find the authors and title of the article.
+                content: "You will get a contents of a article for analysis. Find the authors and title of the article.
+                            This will be the first n*1000 characters from said article content from pdf and have weird foratting or random character sequences, skip those.
                             Answer strictly in this format:
                             <authors> | <title>
                             If you cannot find any author or title, put uknown instead on its place.".to_string(),
