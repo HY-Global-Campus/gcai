@@ -7,6 +7,8 @@ pub mod helpers;
 pub mod skills;
 pub mod v2api;
 pub mod v2azure_openai;
+pub mod v3_tensorzero;
+pub mod v3api;
 
 #[get("/")]
 async fn index() -> impl Responder {
@@ -57,6 +59,24 @@ async fn v2_chat_completion(
     }
 }
 
+#[post("/api/v3/tensorzero/inference")]
+async fn v3_tensorzero_inference(
+    data: web::Json<v3api::types::InferenceRequest>,
+    req: HttpRequest,
+) -> impl Responder {
+    if let Err(response) = auth::check_token(req) {
+        return response;
+    }
+    let inference_request = data.into_inner();
+    match v3_tensorzero::wrapper::inference_route(inference_request).await {
+        Ok(response) => HttpResponse::Ok().json(response),
+        Err(e) => {
+            eprintln!("Error during inference: {:?}", e);
+            HttpResponse::InternalServerError().body("Error: Invalid request.")
+        }
+    }
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
@@ -65,6 +85,7 @@ async fn main() -> std::io::Result<()> {
             .service(chat)
             .service(index)
             .service(v2_chat_completion)
+            .service(v3_tensorzero_inference)
             .route(
                 "/skills/merge_pdf_metadata",
                 web::post().to(skills::merge_pdf_metadata::function::run),
