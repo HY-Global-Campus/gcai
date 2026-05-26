@@ -14,6 +14,7 @@ pub struct RequestBody {
     pub top_p: f32,
     pub frequency_penalty: f32,
     pub presence_penalty: f32,
+    #[serde(rename = "max_completion_tokens")]
     pub max_tokens: u32,
     pub stop: Option<String>,
     pub stream: bool,
